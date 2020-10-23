@@ -1,0 +1,70 @@
+# 1 "E:\\AIV\\CStuff\\BatThinkering\\\\src\\circle.c"
+# 1 "<built-in>" 1
+# 1 "<built-in>" 3
+# 324 "<built-in>" 3
+# 1 "<command line>" 1
+# 1 "<built-in>" 2
+# 1 "E:\\AIV\\CStuff\\BatThinkering\\\\src\\circle.c" 2
+# 1 "E:\\AIV\\CStuff\\BatThinkering\\\\include\\maths.h" 1
+
+
+
+
+extern const float MATHS_PI;
+float sqr(float value);
+# 2 "E:\\AIV\\CStuff\\BatThinkering\\\\src\\circle.c" 2
+
+
+float circle_area(float ray) {
+    return sqr(ray) * MATHS_PI;
+}
+# 1 "E:\\AIV\\CStuff\\BatThinkering\\\\src\\main.c"
+# 1 "<built-in>" 1
+# 1 "<built-in>" 3
+# 324 "<built-in>" 3
+# 1 "<command line>" 1
+# 1 "<built-in>" 2
+# 1 "E:\\AIV\\CStuff\\BatThinkering\\\\src\\main.c" 2
+# 1 "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.18362.0\\ucrt\\stdio.h" 1 3
+# 2 "E:\\AIV\\CStuff\\BatThinkering\\\\src\\main.c" 2
+# 1 "E:\\AIV\\CStuff\\BatThinkering\\\\include\\maths.h" 1
+
+
+
+
+extern const float MATHS_PI;
+float sqr(float value);
+# 3 "E:\\AIV\\CStuff\\BatThinkering\\\\src\\main.c" 2
+# 1 "E:\\AIV\\CStuff\\BatThinkering\\\\include\\circle.h" 1
+
+
+
+float circle_area(float ray);
+# 4 "E:\\AIV\\CStuff\\BatThinkering\\\\src\\main.c" 2
+
+int sum(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    int result = sum(2, 3);
+    printf("Result: %d\n", result);
+
+    float squared = sqr(4.f);
+    printf("squared: %f\n", squared);
+
+    float area = circle_area(4.f);
+    printf("area: %f\n", area);
+}
+# 1 "E:\\AIV\\CStuff\\BatThinkering\\\\src\\maths.c"
+# 1 "<built-in>" 1
+# 1 "<built-in>" 3
+# 324 "<built-in>" 3
+# 1 "<command line>" 1
+# 1 "<built-in>" 2
+# 1 "E:\\AIV\\CStuff\\BatThinkering\\\\src\\maths.c" 2
+const float MATHS_PI = 3.14f;
+
+float sqr(float value) {
+    return value * value;
+}
