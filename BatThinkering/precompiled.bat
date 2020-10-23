@@ -13,3 +13,6 @@ if exist "%DEBUG_PATH%" (
 MD "%DEBUG_PATH%"
 
 clang -D_INC_STDIO -I "%INC_PATH%" -E "%SRC_PATH%\*.c">"%DEBUG_PATH%\precompiled.dbg" 
+
+REM this stuff is called both in run.bat and build.bat 
+REM IF and ONLY IF you call them as "run.bat -pre" and "build.bat -pre"
