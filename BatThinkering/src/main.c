@@ -9,7 +9,7 @@ int sum(int a, int b) {
 int main() {
     int result = sum(2, 3);
     printf("Result: %d\n", result);
-
+   
     float squared = sqr(4.f);
     printf("squared: %f\n", squared);
 
