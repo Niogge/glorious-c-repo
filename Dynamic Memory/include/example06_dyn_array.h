@@ -27,6 +27,18 @@ int ** makeMatrix(int n, int m){
     }
     return matrix;
 }
+
+void clearMatrix(int*** matrixPointer,int n, int m){
+    for (int i = 0; i < n; i++)
+    {
+       for (int j = 0; j < m; j++)
+       {
+          *(*(*(matrixPointer)+i)+j) = 0;
+       }
+       
+    }
+    
+}
 int main(){
 
     int n = 3;
@@ -40,6 +52,26 @@ int main(){
         }
         puts("");
     }
+    puts("");
+    clearMatrix(&matrix,n,m);
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            printf("%d\t", matrix[i][j]);
+        }
+        puts("");
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        free(matrix[i]);
+    }
+    free(matrix);
+
+    
+
     
     
     
