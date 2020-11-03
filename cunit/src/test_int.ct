@@ -1,9 +1,9 @@
 #include "aiv-cunit.h"
 
-void test_int_equals(){
+CUNIT_TEST(test_int_equals){
     CUNIT_INT_EQ(1,1);
 }
 
-void test_int_not_equals(){
+CUNIT_TEST(test_int_not_equals){
     CUNIT_INT_EQ(2,1);
 }

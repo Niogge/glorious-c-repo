@@ -1,0 +1,120 @@
+#include <aiv-cunit.h>
+#include "aiv-vector.h"
+
+CUNIT_TEST(test_vector_creation){
+    aiv_vector* vect = aiv_vector_new();
+
+    CUNIT_NOT_NULL(vect); //CHECK IF VECTOR EXISTS
+
+    CUNIT_NOT_NULL(vect->__items); //CHECK IF ITEMS EXISTS 
+
+    CUNIT_INT_EQ(0, vect->__count); //CHECK IF COUNT IS ZERO
+
+    CUNIT_INT_EQ(10, vect->__capacity); //DEFAULT CAPACITY
+
+    aiv_vector_destroy(vect);
+}
+
+CUNIT_TEST(test_vector_create_with_capacity){
+    aiv_vector* vect = aiv_vector_new_with_cap(1);
+
+    CUNIT_NOT_NULL(vect); //CHECK IF VECTOR EXISTS
+
+    CUNIT_NOT_NULL(vect->__items); //CHECK IF ITEMS EXISTS 
+
+    CUNIT_INT_EQ(0, vect->__count); //CHECK IF COUNT IS ZERO
+
+    CUNIT_INT_EQ(1, vect->__capacity); //DEFAULT CAPACITY
+
+    aiv_vector_destroy(vect);
+
+}
+CUNIT_TEST(test_vector_add_one_item){
+    aiv_vector* vect = aiv_vector_new();
+
+    int elem0 = 10;
+    aiv_vector_add(vect, &elem0);
+
+    CUNIT_INT_EQ(1, vect->__count);
+    void * first_ptr = vect->__items[0];
+
+    CUNIT_PTR_EQ(&elem0, first_ptr);
+
+    aiv_vector_destroy(vect);
+}
+
+CUNIT_TEST(test_vector_get_at_index_in_range){
+    aiv_vector* vect = aiv_vector_new();
+
+    int elem0 = 10;
+    aiv_vector_add(vect, &elem0);
+
+    void* elemv = aiv_vector_at(vect, 0);
+
+    CUNIT_PTR_EQ(&elem0, elemv);
+    
+    aiv_vector_destroy(vect);
+}
+
+CUNIT_TEST(test_vector_get_at_index_out_of_range){
+    aiv_vector* vect = aiv_vector_new();
+
+    CUNIT_NULL(aiv_vector_at(vect, -1));
+    CUNIT_NULL(aiv_vector_at(vect, 0));
+    CUNIT_NULL(aiv_vector_at(vect, 1));
+    aiv_vector_destroy(vect);
+}
+
+CUNIT_TEST(test_vector_resize){
+    aiv_vector* vect = aiv_vector_new();
+    int elem0 = 10;
+    aiv_vector_add(vect, &elem0);
+
+    aiv_vector* ptr_after_resize = aiv_vector_resize(vect, 20);
+
+    CUNIT_INT_EQ(20,vect->__capacity);
+
+    CUNIT_INT_EQ(elem0, *(int*)aiv_vector_at(vect,0));
+
+    CUNIT_NOT_NULL(ptr_after_resize);
+    aiv_vector_destroy(vect);
+}
+
+CUNIT_TEST(test_vector_autoresize_on_add){
+    aiv_vector* vect = aiv_vector_new_with_cap(1);
+    int elem = 10;
+    aiv_vector_add(vect, &elem);
+
+    CUNIT_INT_EQ(1, vect->__capacity);
+
+    aiv_vector_add(vect, &elem);
+
+    CUNIT_INT_EQ(2,vect->__capacity);
+    
+    aiv_vector_add(vect, &elem);
+
+    CUNIT_INT_EQ(4,vect->__capacity);
+
+    aiv_vector_destroy(vect);
+}
+
+int __foreach_counter =0;
+void __foreach_count(void * item){
+    __foreach_counter ++;
+}
+
+CUNIT_TEST(test_vector_foreach){
+    aiv_vector* vect = aiv_vector_new();
+
+    int elem1 = 10;
+    aiv_vector_add(vect, &elem1);
+    int elem2 = 20;
+    aiv_vector_add(vect, &elem2);
+    int elem3 = 30;
+    aiv_vector_add(vect, &elem3);
+
+    aiv_vector_foreach(vect, __foreach_count);
+
+    CUNIT_INT_EQ(3, __foreach_counter);
+    aiv_vector_destroy(vect);
+}

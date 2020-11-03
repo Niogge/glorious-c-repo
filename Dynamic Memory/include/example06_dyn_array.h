@@ -15,7 +15,7 @@ int ** makeMatrix(int n, int m){
     matrix = (int **)malloc(n*sizeof(int*));
     for (int i = 0; i < n; i++)
     {
-        matrix[i] = (int*)malloc(m*sizeof(int));
+        *(matrix + i) = (int*)malloc(m*sizeof(int));
     }
 
     for (int i = 0; i < n; i++)
@@ -28,12 +28,12 @@ int ** makeMatrix(int n, int m){
     return matrix;
 }
 
-void clearMatrix(int*** matrixPointer,int n, int m){
+void clearMatrix(int*** matrixPointer,int n, int m, int clearValue){
     for (int i = 0; i < n; i++)
     {
        for (int j = 0; j < m; j++)
        {
-          *(*(*(matrixPointer)+i)+j) = 0;
+          *(*(*(matrixPointer)+i)+j) =clearValue;
        }
        
     }
@@ -53,7 +53,7 @@ int main(){
         puts("");
     }
     puts("");
-    clearMatrix(&matrix,n,m);
+    clearMatrix(&matrix,n,m, -420);
 
     for (int i = 0; i < n; i++)
     {
