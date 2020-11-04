@@ -118,3 +118,222 @@ CUNIT_TEST(test_vector_foreach){
     CUNIT_INT_EQ(3, __foreach_counter);
     aiv_vector_destroy(vect);
 }
+
+CUNIT_TEST(test_vector_is_empty){
+    aiv_vector* vect = aiv_vector_new();
+
+    bool res = aiv_vector_is_empty(vect);
+    CUNIT_INT_EQ(1,res);
+    int elem0 = 10;
+    aiv_vector_add(vect, &elem0);
+    res = aiv_vector_is_empty(vect);
+    CUNIT_INT_EQ(0,res);
+    aiv_vector_destroy(vect);
+
+}
+
+CUNIT_TEST(test_vector_set){
+    aiv_vector* vect = aiv_vector_new();
+    int elem0 = 10;
+    aiv_vector_add(vect, &elem0);
+    int elem1 = 20;
+    aiv_vector_set(vect, 0, &elem1);
+
+    CUNIT_PTR_EQ(&elem1,aiv_vector_at(vect, 0));
+    aiv_vector_destroy(vect);
+
+}
+
+CUNIT_TEST(test_vector_add_all){
+    aiv_vector* vect = aiv_vector_new_with_cap(2);
+    int elem0 = 10;
+    aiv_vector_add(vect, &elem0);
+    aiv_vector_add(vect, &elem0);
+
+    aiv_vector* vect2 = aiv_vector_new();
+    int elem1 = 10;
+    aiv_vector_add(vect2, &elem1);
+
+    aiv_vector_add_all(vect,vect2);
+
+    CUNIT_INT_EQ(6, vect->__capacity);
+    CUNIT_PTR_EQ(&elem1,aiv_vector_at(vect,2));
+    
+    aiv_vector_destroy(vect);
+
+}
+
+CUNIT_TEST(test_vector_remove_at){
+    aiv_vector* vect = aiv_vector_new_with_cap(2);
+    int elem0 = 10;
+    int elem1 = 20;
+    int elem2 = 30;
+    aiv_vector_add(vect, &elem0);
+    aiv_vector_add(vect, &elem1);
+    aiv_vector_add(vect, &elem2);
+    
+    void* removed = aiv_vector_remove_at(vect, 1);
+
+    CUNIT_INT_EQ(elem2, *(int*)aiv_vector_at(vect,1));
+    CUNIT_INT_EQ(2, vect->__count);
+    CUNIT_INT_EQ(elem1, *(int*)removed);
+    CUNIT_NOT_NULL(removed);
+    aiv_vector_destroy(vect);
+
+}
+CUNIT_TEST(test_vector_downsize){
+     aiv_vector* vect = aiv_vector_new_with_cap(2);
+    int elem0 = 10;
+    int elem1 = 20;
+    int elem2 = 30;
+    aiv_vector_add(vect, &elem0);
+    aiv_vector_add(vect, &elem1);
+    aiv_vector_add(vect, &elem2);
+   
+    CUNIT_INT_EQ(4, vect->__capacity);
+
+    aiv_vector_remove_at(vect, 1);
+    aiv_vector_remove_at(vect, 1);
+
+    CUNIT_INT_EQ(2, vect->__capacity);
+
+    aiv_vector_destroy(vect);
+
+
+
+}
+CUNIT_TEST(test_vector_size){
+    aiv_vector* vect = aiv_vector_new_with_cap(2);
+    int elem0 = 10;
+    int elem1 = 20;
+    int elem2 = 30;
+    aiv_vector_add(vect, &elem0);
+    aiv_vector_add(vect, &elem1);
+    aiv_vector_add(vect, &elem2);
+
+    uint size = aiv_vector_size(vect);
+    CUNIT_INT_EQ(3,size);
+
+    aiv_vector_destroy(vect);
+
+}
+
+CUNIT_TEST(test_vector_insert_at){
+    aiv_vector* vect = aiv_vector_new_with_cap(2);
+    int elem0 = 10;
+    int elem1 = 20;
+    int elem2 = 30;
+    aiv_vector_add(vect, &elem0);
+    aiv_vector_add(vect, &elem1);
+    int elem3 = 30;
+
+    aiv_vector_insert_at(vect, 0, &elem3);
+
+    CUNIT_PTR_EQ(&elem3, aiv_vector_at(vect,0));
+    CUNIT_PTR_EQ(&elem0, aiv_vector_at(vect,1));
+    CUNIT_INT_EQ(3,aiv_vector_size(vect));
+    CUNIT_INT_EQ(4,vect->__capacity)
+
+    aiv_vector_destroy(vect);
+}
+
+bool compare_predicate(void* elem){
+    int elem_int = *(int*)elem;
+    if(elem_int == 30){
+        return true;
+    }
+    return false;
+}
+CUNIT_TEST(test_vector_find_one){
+    aiv_vector* vect = aiv_vector_new_with_cap(2);
+    int elem0 = 10;
+    int elem1 = 20;
+    int elem2 = 30;
+    aiv_vector_add(vect, &elem0);
+    aiv_vector_add(vect, &elem1);
+    aiv_vector_add(vect, &elem2);
+
+    void* itemFound = aiv_vector_find_one(vect, compare_predicate);
+    
+    CUNIT_PTR_EQ(&elem2, itemFound);
+    aiv_vector_destroy(vect);
+}
+bool compare_predicate_absent(void* elem){
+    int elem_int = *(int*)elem;
+    if(elem_int == 40){
+        return true;
+    }
+    return false;
+}
+CUNIT_TEST(test_vector_find_one_absent){
+    aiv_vector* vect = aiv_vector_new_with_cap(2);
+    int elem0 = 10;
+    int elem1 = 20;
+    int elem2 = 30;
+    aiv_vector_add(vect, &elem0);
+    aiv_vector_add(vect, &elem1);
+    aiv_vector_add(vect, &elem2);
+
+    void* itemFound = aiv_vector_find_one(vect, compare_predicate_absent);
+    
+    CUNIT_NULL(itemFound);
+    aiv_vector_destroy(vect);
+}
+
+CUNIT_TEST(test_vector_find_all){
+    aiv_vector* vect = aiv_vector_new_with_cap(2);
+    int elem0 = 10;
+    int elem1 = 20;
+    int elem2 = 30;
+    int elem3 = 30;
+    aiv_vector_add(vect, &elem0);
+    aiv_vector_add(vect, &elem1);
+    aiv_vector_add(vect, &elem2);
+    aiv_vector_add(vect, &elem3);
+
+    aiv_vector* itemFound = aiv_vector_find_all(vect, compare_predicate);
+    
+
+    CUNIT_INT_EQ(2, itemFound->__count);
+    CUNIT_PTR_EQ(&elem2, aiv_vector_at(itemFound,0));
+    CUNIT_PTR_EQ(&elem3, aiv_vector_at(itemFound,1));
+    
+    aiv_vector_destroy(vect);
+}
+
+int comparator(void* A, void* B){
+    int A_int = *(int*)A;
+    int B_int = *(int*)B;
+    if(A_int>B_int){
+        return -1;
+    }
+    if(A_int<B_int){
+        return 1;
+    }
+    return 0;
+    
+}
+CUNIT_TEST(test_vector_bubble_sort){
+    aiv_vector* vect = aiv_vector_new();
+    int elem0 = 10;
+    int elem1 = 30;
+    int elem2 = 20;
+    int elem3 = 5;
+    int elem4 = 30;
+
+    aiv_vector_add(vect, &elem0);
+    aiv_vector_add(vect, &elem1);
+    aiv_vector_add(vect, &elem2);
+    aiv_vector_add(vect, &elem3);
+    aiv_vector_add(vect, &elem4);
+
+    aiv_vector_bubble(vect,comparator);
+
+    CUNIT_INT_EQ(elem3,*(int*)aiv_vector_at(vect,0));
+    CUNIT_INT_EQ(elem0,*(int*)aiv_vector_at(vect,1));
+    CUNIT_INT_EQ(elem2,*(int*)aiv_vector_at(vect,2));
+    CUNIT_INT_EQ(elem1,*(int*)aiv_vector_at(vect,3));
+    CUNIT_INT_EQ(elem4,*(int*)aiv_vector_at(vect,4));
+    
+    aiv_vector_destroy(vect);
+}
