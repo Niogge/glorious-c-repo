@@ -336,4 +336,5 @@ CUNIT_TEST(test_vector_bubble_sort){
     CUNIT_INT_EQ(elem4,*(int*)aiv_vector_at(vect,4));
     
     aiv_vector_destroy(vect);
+
 }
