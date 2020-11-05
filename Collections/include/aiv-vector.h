@@ -1,11 +1,7 @@
 #ifndef AIV_VECTOR_H
 #define AIV_VECTOR_H
 #include <stdlib.h>
-#define true 1
-#define false 0
-
-typedef unsigned int uint;
-typedef unsigned char bool;
+#include "aiv-common.h"
 
 struct _aiv_vector{
     void** __items;
@@ -31,4 +27,5 @@ void aiv_vector_insert_at(aiv_vector* vector, const uint index, void* elem);
 void* aiv_vector_find_one(aiv_vector* vector, bool(*func)(void*));
 aiv_vector* aiv_vector_find_all(aiv_vector* vector, bool(*func)(void*));
 void aiv_vector_bubble(aiv_vector* vector, int (*comparator)(void*,void*));
+void aiv_vector_quick(aiv_vector* vector, int (*comparator)(void*,void*));
 #endif // AIV_VECTOR_H

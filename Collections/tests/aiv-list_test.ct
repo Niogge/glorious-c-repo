@@ -1,0 +1,34 @@
+#include <aiv-cunit.h>
+#include "aiv-list.h"
+
+CUNIT_TEST(test_list_creation){
+    aiv_list* list =  aiv_list_new();
+    CUNIT_NULL(list->__head); 
+    CUNIT_NULL(list->__tail); 
+    aiv_list_destroy(list);
+}
+
+CUNIT_TEST(test_list_add_one_item){
+    aiv_list* list =  aiv_list_new();
+
+    int elem = 10;
+    aiv_list_add(list, &elem);
+
+    CUNIT_PTR_EQ(&elem, list->__head->__data);
+    CUNIT_PTR_EQ(&elem, list->__tail->__data);
+    aiv_list_destroy(list);
+}
+
+CUNIT_TEST(test_list_add_two_item){
+    aiv_list* list =  aiv_list_new();
+
+    int elem = 10;
+    aiv_list_add(list, &elem);
+    int elem1 = 20;
+    aiv_list_add(list, &elem1);
+
+    CUNIT_PTR_EQ(&elem, list->__head->__data);
+    CUNIT_PTR_EQ(&elem1, list->__head->__next->__data);
+    CUNIT_PTR_EQ(&elem1, list->__tail->__data);
+    aiv_list_destroy(list);
+}

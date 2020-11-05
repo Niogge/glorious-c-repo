@@ -142,11 +142,11 @@ aiv_vector* aiv_vector_find_all(aiv_vector* vector, bool(*func)(void*))
 
 void aiv_vector_bubble(aiv_vector* vector, int (*comparator)(void*,void*)){
     bool swap = true;
-    while(swap == true){
+    while(swap){ // worst case -> O(N)
         swap = false;
-        for (int i = 0; i < vector->__count-1; i++)
+        for (int i = 0; i < vector->__count-1; i++) //size -1 * 5 =>  N => O(N)
         {
-            if(comparator(vector->__items[i], vector->__items[i+1]) == -1){
+            if(comparator(vector->__items[i], vector->__items[i+1]) > 0){
 
                 void* temp = vector->__items[i];
                 vector->__items[i] = vector->__items[i+1];
@@ -156,4 +156,76 @@ void aiv_vector_bubble(aiv_vector* vector, int (*comparator)(void*,void*)){
         }
         
     }
+}// O(N)*O(N) --> O(N^2)
+int __aiv_vector_quick_partition(aiv_vector* vector,int (*comparator)(void*,void*),uint start_index,uint end_index){
+
+    int pivot_index = start_index; 
+    int left_index = start_index;
+    int right_index = end_index;
+
+    void* item  = NULL;
+    void* pivot = NULL;
+    while( left_index<right_index){
+
+        bool itemIsGTE = true;
+        while(itemIsGTE && pivot_index<right_index){
+
+            item = aiv_vector_at(vector, right_index);
+            pivot = aiv_vector_at(vector, pivot_index);
+            itemIsGTE = comparator(item, pivot) != -1;
+            if(itemIsGTE){
+                right_index--;
+            }
+        }
+        if(pivot_index != right_index){
+            vector->__items[pivot_index] = item;
+            vector->__items[right_index] = pivot;
+            pivot_index = right_index;
+        }
+
+        bool itemIsLTE = true;
+        while(itemIsLTE && pivot_index > left_index){
+            item = aiv_vector_at(vector,left_index);
+            pivot = aiv_vector_at(vector, pivot_index);
+            itemIsLTE = comparator(item, pivot) != 1;
+            if(itemIsLTE){
+                left_index++;
+            }
+        }
+        if(pivot_index != left_index){
+            vector->__items[pivot_index] = item;
+            vector->__items[left_index] = pivot;
+            pivot_index = left_index;
+        }
+    }
+    return pivot_index;
 }
+void __aiv_vector_quick_recurs(aiv_vector* vector,int (*comparator)(void*,void*),uint start_index,uint end_index){
+    if(start_index >= end_index) 
+        return;  // se si incrociano ritorno 
+    int pivot_index = __aiv_vector_quick_partition(vector, comparator, start_index, end_index); //nonostante gli indici so positivi, 
+                                                                                                //accettiamo anche indici negativi per non bloccare la funzione dopo
+    __aiv_vector_quick_recurs(vector, comparator, start_index, pivot_index-1);
+    __aiv_vector_quick_recurs(vector, comparator, pivot_index +1 , end_index);
+
+}
+void aiv_vector_quick(aiv_vector* vector, int (*comparator)(void*,void*)){
+    __aiv_vector_quick_recurs(vector, comparator, 0, vector->__count -1);
+}
+
+
+/*
+int algoritmo(a, b){
+    int sum = a+b;  //1
+    return sum;     //1  
+} //si arrotonda --> O(1) [tempo costante]
+
+void printCount(int num){
+    int num2 = 2 * num;             //1  
+    for (int i = 0; i < num2; i++) // 2* num 
+    {
+        int v = i+1;  //1
+        print(v);     //1
+    } // 1 + 2*num *2  ---> 2*num*2 ---> 4num ---> num  ---> O(N)
+    
+}*/

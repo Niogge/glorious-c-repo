@@ -1,5 +1,7 @@
 #include <aiv-cunit.h>
 #include "aiv-vector_test.ct"
+#include "aiv-list_test.ct"
+#include "aiv-dictionary_test.ct"
 
 CUNIT_RUNNER(test_vector_creation,
             test_vector_add_one_item,
@@ -19,5 +21,18 @@ CUNIT_RUNNER(test_vector_creation,
             test_vector_find_one,
             test_vector_find_one_absent,
             test_vector_find_all,
-            test_vector_bubble_sort
+            test_vector_bubble_sort_int,
+            test_vector_quick_sort_int,
+
+
+
+            test_list_creation,
+            test_list_add_one_item,
+            test_list_add_two_item,
+
+
+
+
+            test_dict_creation,
+            test_dict_put_new_key
             );
