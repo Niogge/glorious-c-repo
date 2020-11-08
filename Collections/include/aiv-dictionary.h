@@ -12,6 +12,9 @@ struct _aiv_dict_node{
     void* data;
     dict_node* next;
 };
+//it's better to use a linked list so we can have better insert and remove, easier than a vector
+//we are basically keeping an array of smaller linked lists, so we get the flexibility of a linked list
+//but we can easy access elements ALMOST directly with keys (if we have low collisions)
 typedef struct{
     dict_node** __hashmap;
 } aiv_dict;

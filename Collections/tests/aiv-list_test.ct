@@ -32,3 +32,214 @@ CUNIT_TEST(test_list_add_two_item){
     CUNIT_PTR_EQ(&elem1, list->__tail->__data);
     aiv_list_destroy(list);
 }
+
+CUNIT_TEST(test_list_is_empty){
+    aiv_list* list =  aiv_list_new();
+
+    bool empty = aiv_list_is_empty(list);
+    CUNIT_IS_TRUE(empty);
+
+    int elem = 10;
+    aiv_list_add(list, &elem);
+    empty = aiv_list_is_empty(list);
+
+    CUNIT_IS_TRUE((!empty));
+
+    aiv_list_destroy(list);
+
+}
+
+CUNIT_TEST(test_list_size){
+    aiv_list* list =  aiv_list_new();
+    uint count = aiv_list_size(list);
+    
+    CUNIT_INT_EQ(0,count);
+
+    int elem = 10;
+    aiv_list_add(list, &elem);
+    count = aiv_list_size(list);
+    CUNIT_INT_EQ(1,count);
+
+    aiv_list_destroy(list);
+}
+
+
+CUNIT_TEST(test_list_item_at){
+    aiv_list* list =  aiv_list_new();
+    int elem = 0;
+    aiv_list_add(list, &elem);
+
+    void* item = aiv_list_item_at(list, 0);
+    
+    CUNIT_PTR_EQ(&elem,item);
+
+    aiv_list_destroy(list);
+}
+
+
+CUNIT_TEST(test_list_add_item_at_head){
+    aiv_list* list =  aiv_list_new();
+    int elem = 0;
+    aiv_list_add(list, &elem);
+    int elem1 = 10;
+    aiv_list_add(list, &elem1);
+
+    int elem2 = 20;
+    aiv_list_add_item_at(list,&elem2, 0);
+
+    void* item = aiv_list_item_at(list, 0);
+
+    CUNIT_PTR_EQ(&elem2,item);
+
+
+    aiv_list_destroy(list);
+}
+
+CUNIT_TEST(test_list_add_item_at){
+    aiv_list* list =  aiv_list_new();
+    int elem = 0;
+    aiv_list_add(list, &elem);
+    int elem1 = 10;
+    aiv_list_add(list, &elem1);
+
+    int elem2 = 20;
+    aiv_list_add_item_at(list,&elem2, 1);
+
+    void* item = aiv_list_item_at(list,1);
+
+    CUNIT_PTR_EQ(&elem2,item);
+
+
+    aiv_list_destroy(list);
+}
+CUNIT_TEST(test_list_remove_item_head){
+    aiv_list* list =  aiv_list_new();
+    int elem = 0;
+    aiv_list_add(list, &elem);
+    int elem1 = 10;
+    aiv_list_add(list, &elem1);
+
+    aiv_list_remove(list, &elem);
+
+    CUNIT_INT_EQ(1, aiv_list_size(list));
+    CUNIT_PTR_EQ(&elem1, aiv_list_item_at(list,0));
+    aiv_list_destroy(list);
+
+}
+CUNIT_TEST(test_list_remove_item_tail){
+    aiv_list* list =  aiv_list_new();
+    int elem = 0;
+    aiv_list_add(list, &elem);
+    int elem1 = 10;
+    aiv_list_add(list, &elem1);
+
+    aiv_list_remove(list, &elem1);
+
+    CUNIT_INT_EQ(1, aiv_list_size(list));
+    CUNIT_PTR_EQ(&elem, aiv_list_item_at(list,0));
+    aiv_list_destroy(list);
+
+
+}
+CUNIT_TEST(test_list_remove_item){
+    aiv_list* list =  aiv_list_new();
+    int elem = 0;
+    aiv_list_add(list, &elem);
+    int elem1 = 10;
+    aiv_list_add(list, &elem1);
+    int elem2 = 10;
+    aiv_list_add(list, &elem2);
+
+    aiv_list_remove(list, &elem1);
+
+    CUNIT_INT_EQ(2, aiv_list_size(list));
+    CUNIT_PTR_EQ(&elem, aiv_list_item_at(list,0));
+    CUNIT_PTR_EQ(&elem2, aiv_list_item_at(list,1));
+    aiv_list_destroy(list);
+
+}
+
+CUNIT_TEST(test_list_remove_at_head){
+    aiv_list* list =  aiv_list_new();
+    int elem = 0;
+    aiv_list_add(list, &elem);
+    int elem1 = 10;
+    aiv_list_add(list, &elem1);
+
+    aiv_list_remove_at(list, 0);
+
+    CUNIT_INT_EQ(1, aiv_list_size(list));
+    CUNIT_PTR_EQ(&elem1, aiv_list_item_at(list,0));
+    aiv_list_destroy(list);
+
+}
+CUNIT_TEST(test_list_remove_at_tail){
+    aiv_list* list =  aiv_list_new();
+    int elem = 0;
+    aiv_list_add(list, &elem);
+    int elem1 = 10;
+    aiv_list_add(list, &elem1);
+
+    aiv_list_remove_at(list, 1);
+
+    CUNIT_INT_EQ(1, aiv_list_size(list));
+    CUNIT_PTR_EQ(&elem, aiv_list_item_at(list,0));
+    aiv_list_destroy(list);
+
+
+}
+CUNIT_TEST(test_list_remove_at){
+    aiv_list* list =  aiv_list_new();
+    int elem = 0;
+    aiv_list_add(list, &elem);
+    int elem1 = 10;
+    aiv_list_add(list, &elem1);
+    int elem2 = 10;
+    aiv_list_add(list, &elem2);
+
+    aiv_list_remove_at(list, 1);
+
+    CUNIT_INT_EQ(2, aiv_list_size(list));
+    CUNIT_PTR_EQ(&elem, aiv_list_item_at(list,0));
+    CUNIT_PTR_EQ(&elem2, aiv_list_item_at(list,1));
+    aiv_list_destroy(list);
+
+}
+
+CUNIT_TEST(test_list_contains){
+    aiv_list* list =  aiv_list_new();
+    int elem = 0;
+    aiv_list_add(list, &elem);
+    int elem1 = 10;
+
+    bool contains_TRUE = aiv_list_contains(list, &elem);
+    bool contains_FALSE = aiv_list_contains(list, &elem1);
+
+    CUNIT_IS_TRUE(contains_TRUE);
+    CUNIT_IS_TRUE((!contains_FALSE));
+
+    aiv_list_destroy(list);
+}
+
+CUNIT_TEST(test_list_index_of){
+    aiv_list* list =  aiv_list_new();
+    int elem = 0;
+    aiv_list_add(list, &elem);
+    int elem1 = 10;
+    aiv_list_add(list, &elem1);
+    int elem2 = 10;
+
+    aiv_list_add(list, &elem2);
+    int elem3 = 10;
+
+
+    int indexOf = aiv_list_index_of(list, &elem2);
+
+    CUNIT_INT_EQ(2,indexOf);
+    indexOf = aiv_list_index_of(list, &elem3);
+
+    CUNIT_INT_EQ(-1,indexOf);
+
+    aiv_list_destroy(list);
+}
+

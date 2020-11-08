@@ -29,10 +29,23 @@ CUNIT_RUNNER(test_vector_creation,
             test_list_creation,
             test_list_add_one_item,
             test_list_add_two_item,
-
-
+            test_list_is_empty,
+            test_list_size,
+            test_list_item_at,
+            test_list_add_item_at_head,
+            test_list_add_item_at,
+            test_list_remove_item,
+            test_list_remove_item_head,
+            test_list_remove_item_tail,
+            test_list_remove_at,
+            test_list_remove_at_head,
+            test_list_remove_at_tail,
+            test_list_contains,
+            test_list_index_of,
 
 
             test_dict_creation,
-            test_dict_put_new_key
+            test_dict_put_new_key,
+            test_dict_put_colliding_key,
+            test_dict_put_same_key
             );
