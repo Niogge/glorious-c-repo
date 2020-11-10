@@ -38,11 +38,12 @@ void aiv_dict_put(aiv_dict* dict, void* key, uint keylen,  void* val){
         dict_node * currnode = dict->__hashmap[hash_index];
         dict_node * lastnode;
         while(currnode != NULL){
-            if(keylen!=currnode->keylen) continue; //different
-            if(memcmp(key,currnode->key,keylen)==0){
-                //same key, substitute
-                currnode->data = val;
-                return;
+            if(keylen==currnode->keylen){
+                if(memcmp(key,currnode->key,keylen)==0){
+                    //same key, substitute
+                    currnode->data = val;
+                    return;
+                }
             }
             lastnode = currnode;
             currnode = currnode->next;

@@ -10,7 +10,7 @@ CUNIT_TEST(test_dict_put_new_key){
     aiv_dict* dict = aiv_dict_new();
     int key =1;
     int val = 10;
-    aiv_dict_put(dict, &key,sizeof(int*), &val);
+    aiv_dict_put(dict, &key,sizeof(int), &val);
 
     CUNIT_PTR_EQ(&val, dict->__hashmap[0]->data);
 }
@@ -19,10 +19,10 @@ CUNIT_TEST(test_dict_put_colliding_key){
     aiv_dict* dict = aiv_dict_new();
     int key =1;
     int val = 10;
-    aiv_dict_put(dict, &key,sizeof(int*), &val);
+    aiv_dict_put(dict, &key,sizeof(int), &val);
     int key2 =3;
     int val2 = 20;
-    aiv_dict_put(dict, &key2,sizeof(int*), &val2);
+    aiv_dict_put(dict, &key2,sizeof(int), &val2);
     CUNIT_PTR_EQ(&val, dict->__hashmap[0]->data);
     CUNIT_PTR_EQ(&val2, dict->__hashmap[0]->next->data);
 }
@@ -31,8 +31,8 @@ CUNIT_TEST(test_dict_put_same_key){
     aiv_dict* dict = aiv_dict_new();
     int key =1;
     int val = 10;
-    aiv_dict_put(dict, &key,sizeof(int*), &val);
+    aiv_dict_put(dict, &key,sizeof(int), &val);
     int val2 = 20;
-    aiv_dict_put(dict, &key,sizeof(int*), &val2);
+    aiv_dict_put(dict, &key,sizeof(int), &val2);
     CUNIT_PTR_EQ(&val2, dict->__hashmap[0]->data);
 }
