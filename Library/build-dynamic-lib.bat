@@ -14,6 +14,7 @@ set APP_PATH="%BIN_PATH%\mylib.dll"
 @REM MD "%BIN_PATH%"
 
 clang ^
+    -DBUILD_DLL ^
     -I "%INC_PATH%" ^
     -o %APP_PATH% "%SRC_PATH%\*.c" ^
     --shared
