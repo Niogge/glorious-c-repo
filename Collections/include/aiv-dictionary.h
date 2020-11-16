@@ -17,10 +17,19 @@ struct _aiv_dict_node{
 //but we can easy access elements ALMOST directly with keys (if we have low collisions)
 typedef struct{
     dict_node** __hashmap;
+    int __capacity;
+    uint (*__hasher)(void*, uint);
+    uint __count;
 } aiv_dict;
 
 aiv_dict* aiv_dict_new();
+aiv_dict* aiv_dict_new_capacity(int capacity);
+aiv_dict* aiv_dict_new_hash(uint (*hashfunct)(void*, uint));
 void aiv_dict_put(aiv_dict* dict, void* key, uint keylen, void* val);
-
-
+void aiv_dict_destroy(aiv_dict* dict);
+bool aiv_dict_is_empty(aiv_dict* dict);
+uint aiv_dict_size(aiv_dict* dict);
+void* aiv_dict_get(aiv_dict* dict, void*key, uint keylen);
+void aiv_dict_remove(aiv_dict* dict, void* data);
+bool aiv_dict_contains_key(aiv_dict* dict, void *key, uint keylen);
 #endif

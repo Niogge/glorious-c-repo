@@ -12,7 +12,8 @@ CUNIT_TEST(test_dict_put_new_key){
     int val = 10;
     aiv_dict_put(dict, &key,sizeof(int), &val);
 
-    CUNIT_PTR_EQ(&val, dict->__hashmap[0]->data);
+    CUNIT_PTR_EQ(&val, aiv_dict_get(dict,&key,sizeof(int)));
+    aiv_dict_destroy(dict);
 }
 
 CUNIT_TEST(test_dict_put_colliding_key){
@@ -23,8 +24,8 @@ CUNIT_TEST(test_dict_put_colliding_key){
     int key2 =3;
     int val2 = 20;
     aiv_dict_put(dict, &key2,sizeof(int), &val2);
-    CUNIT_PTR_EQ(&val, dict->__hashmap[0]->data);
-    CUNIT_PTR_EQ(&val2, dict->__hashmap[0]->next->data);
+    CUNIT_PTR_EQ(&val, aiv_dict_get(dict,&key,sizeof(int)));
+    CUNIT_PTR_EQ(&val2, aiv_dict_get(dict,&key2,sizeof(int)));
 }
 
 CUNIT_TEST(test_dict_put_same_key){
@@ -34,5 +35,71 @@ CUNIT_TEST(test_dict_put_same_key){
     aiv_dict_put(dict, &key,sizeof(int), &val);
     int val2 = 20;
     aiv_dict_put(dict, &key,sizeof(int), &val2);
-    CUNIT_PTR_EQ(&val2, dict->__hashmap[0]->data);
+    CUNIT_PTR_EQ(&val2, aiv_dict_get(dict,&key,sizeof(int)));
+}
+
+CUNIT_TEST(test_dict_get_key){
+    aiv_dict* dict = aiv_dict_new();
+    int key =1;
+    int val = 10;
+    aiv_dict_put(dict, &key,sizeof(int), &val);
+
+
+    void* got = aiv_dict_get(dict,&key, sizeof(int));
+    CUNIT_PTR_EQ(&val,got);
+    aiv_dict_destroy(dict);
+}
+
+
+CUNIT_TEST(test_dict_remove){
+    aiv_dict* dict = aiv_dict_new();
+    int key =1;
+    int val = 10;
+    aiv_dict_put(dict, &key,sizeof(int), &val);
+
+    CUNIT_INT_EQ(1,dict->__count);
+    aiv_dict_remove(dict, &val);
+    CUNIT_INT_EQ(0,dict->__count);
+    
+    aiv_dict_destroy(dict);
+}
+
+
+CUNIT_TEST(test_dict_contains_key){
+    aiv_dict* dict = aiv_dict_new();
+    int key =1;
+    int val = 10;
+    aiv_dict_put(dict, &key,sizeof(int), &val);
+
+    CUNIT_IS_TRUE(aiv_dict_contains_key(dict,&key,sizeof(int)));
+    int key2 =2;
+
+    CUNIT_IS_TRUE(aiv_dict_contains_key(dict,&key2,sizeof(int))==0);
+    
+    aiv_dict_destroy(dict);
+}
+
+CUNIT_TEST(test_dict_resize){
+    aiv_dict* dict = aiv_dict_new_capacity(1);
+    int key =1;
+    int val = 10;
+    aiv_dict_put(dict, &key,sizeof(int), &val);
+
+
+    CUNIT_INT_EQ(2, dict->__capacity);
+    CUNIT_INT_EQ(1, dict->__count)
+    int key2 =2;
+    int val2 = 10;
+    aiv_dict_put(dict, &key2,sizeof(int), &val2);
+    CUNIT_INT_EQ(2, dict->__count)
+    CUNIT_INT_EQ(4, dict->__capacity);
+
+    CUNIT_PTR_EQ(&val, aiv_dict_get(dict,&key,sizeof(int)));
+    CUNIT_PTR_EQ(&val2, aiv_dict_get(dict,&key2,sizeof(int)));
+    // int val2 = 20;
+    // int key2 =2;
+
+    // aiv_dict_put(dict, &key2,sizeof(int), &val2);
+    
+    aiv_dict_destroy(dict);
 }

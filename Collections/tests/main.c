@@ -47,5 +47,9 @@ CUNIT_RUNNER(test_vector_creation,
             test_dict_creation,
             test_dict_put_new_key,
             test_dict_put_colliding_key,
-            test_dict_put_same_key
+            test_dict_put_same_key,
+            test_dict_get_key,
+            test_dict_remove,
+            test_dict_contains_key,
+            test_dict_resize
             );

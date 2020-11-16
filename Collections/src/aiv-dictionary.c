@@ -12,14 +12,74 @@ uint djb33x_hash(void* key, uint keylen){
 }
 
 aiv_dict* aiv_dict_new(){
+    return aiv_dict_new_capacity(10);
+}
+aiv_dict* aiv_dict_new_capacity(int capacity){
     aiv_dict* dict = (aiv_dict*)malloc(sizeof(aiv_dict));
-    dict->__hashmap = (dict_node**)calloc(sizeof(void*),1);
+    dict->__capacity = capacity;
+    dict->__hasher = djb33x_hash;
+    dict->__hashmap = (dict_node**)calloc(sizeof(void*),dict->__capacity);
+    dict->__count = 0;
     return dict;
 }
+aiv_dict* aiv_dict_new_hash(uint (*hashfunct)(void*, uint)){
+    aiv_dict* dict = (aiv_dict*)malloc(sizeof(aiv_dict));
+    dict->__capacity = 10;
+    dict->__hasher = hashfunct;
+    dict->__hashmap = (dict_node**)calloc(sizeof(void*),dict->__capacity);
+    dict->__count = 0;
 
+    return dict;
+}
+void aiv_dict_destroy(aiv_dict* dict){
+    for (int i = 0; i < dict->__capacity; i++)
+    {
+        dict_node* curr = dict->__hashmap[i];
+        while (curr != NULL)
+        {
+            dict_node* next = curr->next;
+            free(curr);
+            curr = next;
+        }
+    }
+    free(dict->__hashmap);
+    free(dict);
+    
+}
+
+
+void _aiv_dict_resize(aiv_dict* dict, int new_cap){
+    aiv_dict* newDict = aiv_dict_new_capacity(new_cap);
+    for (int i = 0; i < dict->__capacity; i++)
+    {
+        dict_node* curr = dict->__hashmap[i];
+        while(curr!=NULL){
+            aiv_dict_put(newDict,curr->key,curr->keylen,curr->data);
+            curr = curr->next;
+        } 
+    }
+    //dict = newDict;
+ 
+    for (int i = 0; i < dict->__capacity; i++)
+    {
+        dict_node* curr = dict->__hashmap[i];
+        while (curr != NULL)
+        {
+            dict_node* next = curr->next;
+            free(curr);
+            curr = next;
+        }
+    }
+    free(dict->__hashmap);
+    dict->__capacity = newDict->__capacity;
+    dict->__count = newDict->__count;
+    dict->__hasher = newDict->__hasher;
+    dict->__hashmap = newDict->__hashmap;
+    free(newDict);
+}
 void aiv_dict_put(aiv_dict* dict, void* key, uint keylen,  void* val){
-    uint hash = djb33x_hash(key,keylen);
-    uint hash_index= hash%1;
+    uint hash = dict->__hasher(key,keylen);
+    uint hash_index= hash%dict->__capacity;
     if(dict->__hashmap[hash_index]==NULL){//hash(key) not present
         dict_node * node = malloc(sizeof(dict_node));
         node->key = malloc(sizeof(keylen));
@@ -57,4 +117,74 @@ void aiv_dict_put(aiv_dict* dict, void* key, uint keylen,  void* val){
         node->next= NULL;
         lastnode->next = node;
     }
+    dict->__count ++;
+    if(dict->__count == dict->__capacity){
+        _aiv_dict_resize(dict, dict->__capacity*2);
+    }
+}
+
+bool aiv_dict_is_empty(aiv_dict* dict){
+    return dict->__count==0;
+}
+
+uint aiv_dict_size(aiv_dict* dict){
+    return dict->__count;
+}
+
+void* aiv_dict_get(aiv_dict* dict, void*key, uint keylen){
+    uint hash = dict->__hasher(key,keylen);
+    uint hash_index= hash%dict->__capacity;
+    dict_node* curr = dict->__hashmap[hash_index];
+    while(curr != NULL){
+        if(keylen == curr->keylen){
+            if(memcmp(curr->key,key,keylen)== 0){
+                return curr->data;
+            }
+        }
+        curr= curr->next;
+    }
+    return NULL;
+}
+
+void aiv_dict_remove(aiv_dict* dict, void* data){
+    for (int i = 0; i < dict->__capacity; i++)
+    {
+        dict_node* curr = dict->__hashmap[i];
+        dict_node* prev = NULL;
+        while(curr!=NULL){
+            if(data == curr->data){
+                if(prev == NULL)//first node
+                {
+                    dict->__hashmap[i] = curr->next;
+                    
+                }
+                else{
+                    prev->next= curr->next;
+                    
+                }
+                curr->data = NULL;
+                free(curr);
+                dict->__count--;
+                return;
+            }
+            prev = curr;
+            curr= curr->next;
+        }
+    }
+    
+}
+
+
+bool aiv_dict_contains_key(aiv_dict* dict, void *key, uint keylen){
+    for (int i = 0; i < dict->__capacity; i++)
+    {
+         dict_node* curr = dict->__hashmap[i];
+        while(curr != NULL){
+            if((curr->keylen == keylen) && (memcmp(curr->key,key,keylen)==0)){
+                return true;
+            }
+            curr = curr->next;
+        }
+    }
+    return false;
 }
