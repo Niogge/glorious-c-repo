@@ -1,0 +1,5 @@
+#include "aiv-cunit.h"
+
+CUNIT_TEST(test_simple){
+    CUNIT_IS_TRUE(1);
+}
