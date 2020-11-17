@@ -4,16 +4,16 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-stbi_uc* swapChannels(stbi_uc* buffer, int from, int to, int channels, int buffer_size){
+void swap_channels(stbi_uc* buffer, int A, int B, int channels, int pixel_count){
 
-    for (int i = 0; i < buffer_size; i++)
+    for (int i = 0; i < pixel_count; i++)
     {
         int index = i* channels;
-        char temp = buffer[index+to];
-        buffer[index+to] = buffer[index+from];
-        buffer[index+from] = temp;
+        char temp = buffer[index+A];
+        buffer[index+A] = buffer[index+B];
+        buffer[index+B] = temp;
     }
-    return buffer;
+
     
 }
 
@@ -36,9 +36,12 @@ int main(){
     printf("Pixel0 2>:%d\n", data[2]);
 
 
-    data  = swapChannels(data, 0, 1, channels, width*height );
-    stbi_write_png("assets/green.png",width,height,channels,data,4);
+    swap_channels(data, 0, 1, channels, width*height );
+    stbi_write_png("assets/green.png",width,height,channels,data,0);
 
-    
+    swap_channels(data, 1, 2, channels, width*height );
+    stbi_write_png("assets/blue.png",width,height,channels,data,0);
+
+
     stbi_image_free(data);
 }
