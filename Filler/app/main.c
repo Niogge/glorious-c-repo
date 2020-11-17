@@ -1,8 +1,10 @@
-
-#define STB_IMAGE_IMPLEMENTATION
+#include "filler.h"
+//#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#define STB_IMAGE_WRITE_IMPLEMENTATION
+//#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
+
+
 
 void swap_channels(stbi_uc* buffer, int A, int B, int channels, int pixel_count){
 
@@ -17,7 +19,7 @@ void swap_channels(stbi_uc* buffer, int A, int B, int channels, int pixel_count)
     
 }
 
-int main(){
+int example_img(){
     int width;
     int height;
     int channels;
@@ -39,9 +41,21 @@ int main(){
     swap_channels(data, 0, 1, channels, width*height );
     stbi_write_png("assets/green.png",width,height,channels,data,0);
 
-    swap_channels(data, 1, 2, channels, width*height );
-    stbi_write_png("assets/blue.png",width,height,channels,data,0);
+    //img_filler(destination_file, source_file, pixel_x, pixel_y, r, g,b);
 
 
+    /*
+        1- load image
+        2- read pixel x,y 
+        3- replace
+        4- image_filler_algo(data, init_color, repl_col, x,y);
+        5- save image (data)
+    */
     stbi_image_free(data);
+    return 0;
+}
+
+int main(){
+    img_filler("./assets/green.png","./assets/test.png", 0,0,color_green());
+    puts("ok");
 }
