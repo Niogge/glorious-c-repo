@@ -1,0 +1,73 @@
+#include "aiv-cunit.h"
+#include "filler_algo.h"
+
+CUNIT_TEST(filler_one_pixel){
+    cbyte data[3] = {255,0,0};
+    int w = 1;
+    int h = 1;
+    int c = 3;
+
+    int px = 0;
+    int py = 0;
+
+    color col = color_green();
+    img_filler_algo(data, w, h, c, px,py, col );
+
+    CUNIT_INT_EQ(0, data[0]);
+    CUNIT_INT_EQ(255, data[1]);
+    CUNIT_INT_EQ(0, data[2]);
+    
+}
+
+CUNIT_TEST(filler_1x2_all_filled){
+    cbyte data[6] = {255,0,0,255,0,0};
+    int w = 2;
+    int h = 1;
+    int c = 3;
+
+    int px = 0;
+    int py = 0;
+
+    color col = color_green();
+    img_filler_algo(data, w, h, c, px,py, col );
+
+    CUNIT_INT_EQ(0, data[0]);
+    CUNIT_INT_EQ(255, data[1]);
+    CUNIT_INT_EQ(0, data[2]);
+
+    CUNIT_INT_EQ(0, data[3]);
+    CUNIT_INT_EQ(255, data[4]);
+    CUNIT_INT_EQ(0, data[5]);
+    
+}
+CUNIT_TEST(filler_2x2_three_filled){
+    cbyte data[12] = {255,0,0,     0,0,255,
+                      255,0,0,     255,0,0};
+    int w = 2;
+    int h = 2;
+    int c = 3;
+
+    int px = 0;
+    int py = 0;
+
+    color col = color_green();
+    img_filler_algo(data, w, h, c, px,py, col );
+
+    CUNIT_INT_EQ(0, data[0]);
+    CUNIT_INT_EQ(255, data[1]);
+    CUNIT_INT_EQ(0, data[2]);
+
+    CUNIT_INT_EQ(0, data[3]);
+    CUNIT_INT_EQ(0, data[4]);
+    CUNIT_INT_EQ(255, data[5]);
+
+    CUNIT_INT_EQ(0, data[6]);
+    CUNIT_INT_EQ(255, data[7]);
+    CUNIT_INT_EQ(0, data[8]);
+
+    CUNIT_INT_EQ(0, data[9]);
+    CUNIT_INT_EQ(255, data[10]);
+    CUNIT_INT_EQ(0, data[11]);
+
+    
+}

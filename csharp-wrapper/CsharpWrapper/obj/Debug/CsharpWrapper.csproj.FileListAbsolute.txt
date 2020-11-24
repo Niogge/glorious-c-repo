@@ -1,0 +1,7 @@
+E:\AIV\CStuff\csharp-wrapper\CsharpWrapper\bin\Debug\CsharpWrapper.exe.config
+E:\AIV\CStuff\csharp-wrapper\CsharpWrapper\bin\Debug\CsharpWrapper.exe
+E:\AIV\CStuff\csharp-wrapper\CsharpWrapper\bin\Debug\CsharpWrapper.pdb
+E:\AIV\CStuff\csharp-wrapper\CsharpWrapper\obj\Debug\CsharpWrapper.csprojAssemblyReference.cache
+E:\AIV\CStuff\csharp-wrapper\CsharpWrapper\obj\Debug\CsharpWrapper.csproj.CoreCompileInputs.cache
+E:\AIV\CStuff\csharp-wrapper\CsharpWrapper\obj\Debug\CsharpWrapper.exe
+E:\AIV\CStuff\csharp-wrapper\CsharpWrapper\obj\Debug\CsharpWrapper.pdb
