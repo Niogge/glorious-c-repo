@@ -4,3 +4,4 @@ E:\AIV\CStuff\csharp-wrapper\CsharpWrapper\bin\x64\Debug\CsharpWrapper.pdb
 E:\AIV\CStuff\csharp-wrapper\CsharpWrapper\obj\x64\Debug\CsharpWrapper.csproj.CoreCompileInputs.cache
 E:\AIV\CStuff\csharp-wrapper\CsharpWrapper\obj\x64\Debug\CsharpWrapper.exe
 E:\AIV\CStuff\csharp-wrapper\CsharpWrapper\obj\x64\Debug\CsharpWrapper.pdb
+E:\AIV\CStuff\csharp-wrapper\CsharpWrapper\obj\x64\Debug\CsharpWrapper.csprojAssemblyReference.cache
